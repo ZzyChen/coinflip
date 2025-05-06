@@ -4,6 +4,7 @@
 #include "mypushbutton.h"
 #include "qtimer.h"
 #include <QDebug>
+#include <QSoundEffect>
 MainScene::MainScene(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainScene)
@@ -17,23 +18,33 @@ MainScene::MainScene(QWidget *parent)
     this->setWindowTitle(QString("翻金币"));
     this->setWindowIcon(QIcon(":/res/Coin0001.png"));
 
+    //开始音效
+    QSoundEffect *startSound = new QSoundEffect(this);
+    startSound->setSource(QUrl::fromLocalFile(":/res/TapButtonSound.wav"));
+    //开始按钮
     MyPushButton *startBtn = new MyPushButton(":/res/MenuSceneStartButton.png");
     startBtn->setParent(this);
     startBtn->move(this->width()*0.5-startBtn->width()*0.5,this->height()*0.7);
 
-    levelScene = new LevelScene(this);
+
     connect(startBtn,&QPushButton::clicked,[=](){
+        levelScene = new LevelScene();
         //startBtn->up();
         startBtn->down();
+        startSound->play();
         QTimer::singleShot(200,this,[=](){
             this->hide();
+            levelScene->setGeometry(this->geometry());
             levelScene->show();
         });
-    });
-    connect(levelScene,&LevelScene::backToMainScene,[=](){
-            this->show();
+        connect(levelScene,&LevelScene::backToMainScene,[=](){
             levelScene->hide();
+            delete levelScene;
+            levelScene = nullptr;
+            this->show();
+        });
     });
+
 }
 
 MainScene::~MainScene()
