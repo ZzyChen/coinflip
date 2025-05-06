@@ -1,5 +1,5 @@
 #include "mainscene.h"
-
+#include "playscene.h"
 #include <QApplication>
 #include <QDebug>
 int main(int argc, char *argv[])
