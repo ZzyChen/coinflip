@@ -41,6 +41,7 @@ void MyPushButton::mousePressEvent(QMouseEvent *e)
     if(pressPath!=""){
         QPixmap pix;
         pix.load(this->pressPath);
+        pix = pix.scaled(pix.width(),pix.height());
         this->setFixedSize(pix.width(),pix.height());
         this->setIcon(pix);
         this->setIconSize(QSize(pix.width(),pix.height()));
